@@ -7,7 +7,6 @@
     void yyerror();
     extern int err_line;
     extern FILE *yyin;
-    extern int indent_level;
 %}
 
 
@@ -22,13 +21,11 @@
 %token <num> MAIS MENOS
 %token <num> MULT DIVIDE
 %token <id> ID NUM
-%type <id> program varlist cmds cmd cmp atomic operacao
-%left '+' '-'
-%left '*' '/'
+%type <id> program varlist cmds cmd cmp atomic operacao ret
 
 %%
 program : 
-    ENTRADA varlist SAIDA varlist cmds FIM
+    ENTRADA varlist SAIDA ret cmds FIM
     {
         FILE *f = fopen("result.c", "w");
         char* codigo = malloc(strlen($2) + strlen($4)*2 + strlen($5) + 49);
@@ -65,6 +62,21 @@ varlist:
         $$ = buff;
     };
 
+ret:
+    ret ID 
+    {
+        char* buff = malloc(strlen($1) + strlen($2) + 2);
+        strcat(buff, $2);
+        strcat(buff, ", ");
+        strcat(buff, $1);
+        $$ = buff;
+    }
+    | ID 
+    {
+        char *buff = malloc(strlen($1));
+        strcat(buff, $1);
+        $$ = buff;
+    };
 
 cmds:
     cmd cmds 
@@ -78,7 +90,6 @@ cmds:
     {
       $$ = $1;
     };
-
 
 cmd:
     ENQUANTO cmp FACA cmds FIM
