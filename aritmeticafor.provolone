@@ -1,0 +1,12 @@
+ENTRADA X Y
+SAIDA Z
+    Z=Y
+    Z=Z+1
+    Z=Z-1
+    Z=Z*X
+    Z=1  + 1/X+7+48
+    FACA Z+1*X/Y VEZES
+        INC(Z)
+    FIM
+
+FIM

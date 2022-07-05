@@ -1,0 +1,14 @@
+ENTRADA X Y
+SAIDA Z
+    Z=Y
+    ENQUANTO X FACA
+        SE X>Y ENTAO FACA
+            INC(Z)
+        FIMIF
+        SE X<=Y ENTAO FACA
+            INC(Z)
+        SENAO FACA
+            DEC(Z)
+        FIMIF
+    FIM
+FIM

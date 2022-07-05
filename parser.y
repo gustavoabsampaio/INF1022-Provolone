@@ -19,10 +19,12 @@
 }
 
 %token <num> ENTRADA SAIDA FACA INC ZERA ENQUANTO FIM VEZES SE ENTAO SENAO ABREPAR FECHAPAR IGUAL DEC MAIORI MENORI MAIOR MENOR IGUALA DIFERENTE FIMIF
+%token <num> MAIS MENOS
+%token <num> MULT DIVIDE
 %token <id> ID NUM
-%type <id> program varlist cmds cmd cmp atomic
-// %left '+' '-'
-// %left '*' '/'
+%type <id> program varlist cmds cmd cmp atomic operacao
+%left '+' '-'
+%left '*' '/'
 
 %%
 program : 
@@ -89,18 +91,7 @@ cmd:
         strcat(buff, "\t}\n");
         $$ = buff;
     };
-    // | FACA cmds ENQUANTO cmp FIM
-    // {
-    //     char* buff = malloc(strlen($2) + strlen($4) + 29);
-    //     strcpy(buff, "\tdo\n\t{\n");
-    //     strcat(buff, $4);
-    //     strcat(buff, "\n\t}\t");
-    //     strcat(buff, "\twhile(");
-    //     strcat(buff, $2);
-    //     strcat(buff, ")\n");
-    //     $$ = buff;
-    // };
-    | FACA atomic VEZES cmds FIM
+    | FACA operacao VEZES cmds FIM
     {
         char* buff = malloc(strlen($2) + strlen($4) + 43);
         strcpy(buff, "\n\tfor(int i = 0; i < ");
@@ -132,7 +123,7 @@ cmd:
         strcat(buff, "\t}\n");
         $$ = buff;
     }
-    | ID IGUAL atomic
+    | ID IGUAL operacao
     {
         char* buff = malloc(strlen($1) + strlen($3) + 8);
         strcpy(buff, "\t");
@@ -181,48 +172,53 @@ atomic:
     };
 
 
-// operacao:
-//     atomic '+' atomic
-//     {
-//         char* buff = malloc(strlen($1) + strlen($3) + 3);
-//         strcpy(buff, $1);
-//         strcat(buff, " + ");
-//         strcat(buff, $3);
-//         $$ = buff;
-//     };
-//     | atomic '-' atomic
-//     {
-//         char* buff = malloc(strlen($1) + strlen($3) + 3);
-//         strcpy(buff, $1);
-//         strcat(buff, " - ");
-//         strcat(buff, $3);
-//         $$ = buff;
-//     };
-//     | atomic '*' atomic
-//     {
-//         char* buff = malloc(strlen($1) + strlen($3) + 3);
-//         strcpy(buff, $1);
-//         strcat(buff, " * ");
-//         strcat(buff, $3);
-//         $$ = buff;
-//     };
-//     | atomic '/' atomic
-//     {
-//         char* buff = malloc(strlen($1) + strlen($3) + 3);
-//         strcpy(buff, $1);
-//         strcat(buff, " / ");
-//         strcat(buff, $3);
-//         $$ = buff;
-//     };
-//     | atomic
-//     // | ABREPAR operacao FECHAPAR
-//     // {
-//     //     char* buff = malloc(strlen($2) + 2);
-//     //     strcpy(buff, "(");
-//     //     strcat(buff, $2);
-//     //     strcat(buff, ")");
-//     //     $$ = buff;
-//     // };
+operacao:
+    operacao MAIS atomic
+    {
+        char* buff = malloc(strlen($1) + strlen($3) + 3);
+        strcpy(buff, $1);
+        strcat(buff, " + ");
+        strcat(buff, $3);
+        $$ = buff;
+    };
+    | operacao MENOS atomic
+    {
+        char* buff = malloc(strlen($1) + strlen($3) + 3);
+        strcpy(buff, $1);
+        strcat(buff, " - ");
+        strcat(buff, $3);
+        $$ = buff;
+    };
+    | operacao MULT atomic
+    {
+        char* buff = malloc(strlen($1) + strlen($3) + 3);
+        strcpy(buff, $1);
+        strcat(buff, " * ");
+        strcat(buff, $3);
+        $$ = buff;
+    };
+    | operacao DIVIDE atomic
+    {
+        char* buff = malloc(strlen($1) + strlen($3) + 3);
+        strcpy(buff, $1);
+        strcat(buff, " / ");
+        strcat(buff, $3);
+        $$ = buff;
+    };
+    // | ABREPAR operacao FECHAPAR
+    // {
+    //     char* buff = malloc(strlen($2) + 2);
+    //     strcpy(buff, "(");
+    //     strcat(buff, $2);
+    //     strcat(buff, ")");
+    //     $$ = buff;
+    // };
+    | atomic
+    {
+        char* buff = malloc(strlen($1));
+        strcpy(buff, $1);
+        $$ = buff;
+    };
 
 
 cmp:

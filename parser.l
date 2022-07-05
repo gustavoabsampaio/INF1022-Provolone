@@ -30,13 +30,12 @@ SENAO       { yylval.id=strdup(yytext); return (SENAO); }
 (<)         { yylval.id=strdup(yytext); return (MENOR); }
 (==)        { yylval.id=strdup(yytext); return (IGUALA); }
 (!=)        { yylval.id=strdup(yytext); return (DIFERENTE); }
-
 [_a-zA-Z][_a-zA-Z0-9]*    { yylval.id=strdup(yytext); return(ID); }
 [0-9]+      { yylval.id=strdup(yytext); return(NUM); }
 [\n]        { err_line++; }
 [ \t]         {}
+"+"        { yylval.id=strdup(yytext); return (MAIS); }
+"-"        { yylval.id=strdup(yytext); return (MENOS); }   
+"*"        { yylval.id=strdup(yytext); return (MULT); }
+"/"        { yylval.id=strdup(yytext); return (DIVIDE); }
 %%
-// (\+)        { yylval.id=strdup(yytext); return (MAIS); }
-// (\-)        { yylval.id=strdup(yytext); return (MENOS); }   
-// (\*)        { yylval.id=strdup(yytext); return (MULTI); }
-// (\/)        { yylval.id=strdup(yytext); return (DIVIDE); }
