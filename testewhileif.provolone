@@ -6,7 +6,9 @@ SAIDA Z
             INC(Z)
         FIMIF
         SE X<=Y ENTAO FACA
-            INC(Z)
+            SE X<=13 ENTAO FACA
+                INC(Z)
+            FIMIF
         SENAO FACA
             DEC(Z)
         FIMIF
